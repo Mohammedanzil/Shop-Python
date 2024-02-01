@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+  {% if category %}
+    {{category.description|truncatewords:155}}
+  {% else %}
+    Welcome to D2D Shopee where you can buy different items...
+  {% endif %}
+{% endblock %}
+
+
+{% block title %}
+  {% if category %}
+    {{category.name}} - D2D Shopee
+  {% else %}
+    See our new collections -D2D Shopee
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  {% if category %}
+    <div>
+      <div class="row my_row_class">
+          <div class="mx_auto">
+              <p><a href="{% url 'E_shop:allProdCat' %}">Our Product Collections</a></p>
+          </div>
+      </div>
+    </div>
+  {% endif %}
+<div class="mx_auto">
+  {% if category %}
+      <img class="my_image" src="{{category.image.url}}" alt="{{category.name}}">
+</div>
+   <br>
+<div>
+    <h1 class="text-center my_title">{{category.name}}</h1>
+    <p class="text-justify">{{category.description}}</p>
+</div>
+   {% else %}
+<div>
+  <img class="my_image my_image_padding" src="{% static 'img/banner.png' %}" alt="our products" width="100%" style="height:500px">
+</div>
+<br>
+<div>
+    <h1 class="text-center ">Our Products Collections</h1>
+    <p class="text-justify">This D2D Shoppee... prototype template refers to the Uber eats app in an attempt to inspire designers to create
+        a both good-looking and practical delivery app. With more than 15 screens and 8 components, this template also provides a series
+        of helpful built-in tools to help designers to quickly work out a food app. Its frequently-used account setting and menu are pre-made
+        well, in addition, fast clone and smooth transition are available for a better and simpler design.</p>
+</div>
+{% endif %}
+<div class="container">
+    <div class="row mx_auto">
+        {% for product in products.object_list %}
+        <div class="my_bottom_margin col-9 col-sm-12 col-md-4 xol-lg-4">
+            <div class="card text-center "  >
+                <a href="{{product.get_url}}"><img class="card-img-top my_image"  src="{{product.image.url}}" alt="{{product.name}}" style="height:400px;width:350px;padding:10px;"></a>
+            <div class="card-body">
+                <h4>{{product.name}}</h4>
+                <p>{{product.price}}</p>
+            </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="mx_auto">
+        {% if products.paginator.num_pages > 1 %}
+
+        <hr>
+        <div class="text-center">
+            {% for pg in products.paginator.page_range %}
+                <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <br>
+</div>
+{% endblock %}
